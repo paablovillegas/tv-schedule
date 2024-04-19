@@ -1,6 +1,5 @@
 package com.pablo.tvschedule.ui
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -9,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.pablo.tvschedule.ui.detail.DetailScreen
 import com.pablo.tvschedule.ui.home.HomeScreen
 
 
@@ -26,7 +26,9 @@ fun TvScheduleNavGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen()
+            HomeScreen { id ->
+                navigationActions.navigateToDetail(id)
+            }
         }
         composable(
             route = Screen.Detail.route,
@@ -34,7 +36,9 @@ fun TvScheduleNavGraph(
                 navArgument("id") { type = NavType.IntType }
             )
         ) {
-
+            DetailScreen {
+                navigationActions.navigateToHome()
+            }
         }
     }
 }

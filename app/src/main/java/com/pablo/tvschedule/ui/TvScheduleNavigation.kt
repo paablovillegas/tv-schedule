@@ -23,7 +23,7 @@ class TvScheduleActions(navController: NavController) {
         }
     }
 
-    val navigateToDetail = { id: Int ->
+    val navigateToDetail: (Int) -> Unit = { id: Int ->
         navController.navigate(Screen.Detail.passId(id)) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true

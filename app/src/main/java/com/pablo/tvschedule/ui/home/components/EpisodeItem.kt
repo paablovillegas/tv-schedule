@@ -27,6 +27,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.Show
+import com.pablo.tvschedule.domain.model.getEpisode
 
 @Composable
 fun EpisodeItem(
@@ -146,25 +147,7 @@ fun ShowSummary(
 @Preview(showBackground = true, name = "Episode item example")
 @Composable
 private fun EpisodeItemPreview() {
-    val episode = Episode(
-        id = 2804307,
-        name = "Lost & Found",
-        show = Show(
-            name = "Doc McStuffins",
-            type = "Animation",
-            genres = listOf("Children"),
-            premiered = 2012,
-            ended = 2020,
-            rating = 6.3,
-            image = "https://static.tvmaze.com/uploads/images/medium_portrait/22/55379.jpg"
-        ),
-        summary = "While one front is rained on by flames, the other is battered by boulders. With no way out and limited options, the Scouts are forced to fight against the Titans with little hope left.",
-        season = 5,
-        number = 11,
-        airDate = "2024-04-18",
-        airTime = "00:00",
-        image = null
-    )
+    val episode = getEpisode()
 
     EpisodeItem(episode = episode)
 }
