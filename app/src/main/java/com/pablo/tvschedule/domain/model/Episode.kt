@@ -8,7 +8,7 @@ data class Episode(
     val airDate: String,
     val airTime: String,
     val runTime: Int,
-    val rating: Double,
+    val rating: Double?,
     val image: String?,
     val summary: String?,
     val show: Show,

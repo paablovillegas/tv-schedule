@@ -10,24 +10,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.pablo.tvschedule.domain.model.Episode
-import com.pablo.tvschedule.domain.model.Show
 import com.pablo.tvschedule.domain.model.getEpisode
+import com.pablo.tvschedule.ui.common.EpisodeData
+import com.pablo.tvschedule.ui.common.EpisodeSummary
+import com.pablo.tvschedule.ui.common.ShowData
 
 @Composable
 fun EpisodeItem(
@@ -44,36 +40,23 @@ fun EpisodeItem(
             ),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            EpisodeImage(
+            ShowImage(
                 name = episode.show.name,
-                image = episode.image ?: episode.show.image
+                image = episode.show.image
             )
             Column(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                EpisodeSummary(
-                    name = episode.name,
-                    airDate = episode.airDate,
-                    airTime = episode.airTime
-                )
-                ShowSummary(
-                    name = episode.show.name,
-                    premiered = episode.show.premiered,
-                    ended = episode.show.ended,
-                    rating = episode.show.rating,
-                    type = episode.show.type,
-                    genres = episode.show.genres
-                )
-                episode.summary?.let { summary ->
-                    Text(text = summary)
-                }
+                EpisodeData(episode = episode)
+                ShowData(show = episode.show)
+                EpisodeSummary(description = episode.summary)
             }
         }
     }
 }
 
 @Composable
-fun EpisodeImage(
+fun ShowImage(
     name: String,
     image: String
 ) {
@@ -92,56 +75,6 @@ fun EpisodeImage(
             .width(90.dp)
             .height(150.dp)
     )
-}
-
-@Composable
-fun EpisodeSummary(
-    modifier: Modifier = Modifier,
-    name: String,
-    airDate: String,
-    airTime: String
-) {
-    Row(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = name,
-            style = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-        )
-        Text(
-            text = "$airDate $airTime",
-            style = TextStyle(
-                color = MaterialTheme.colorScheme.primary
-            ),
-            textAlign = TextAlign.End,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-fun ShowSummary(
-    name: String,
-    premiered: Int,
-    ended: Int?,
-    rating: Double,
-    type: String,
-    genres: List<String>
-) {
-    Text(
-        text = "$name ($premiered - ${ended ?: ""})",
-        style = TextStyle(
-            color = MaterialTheme.colorScheme.secondary
-        )
-    )
-    Text(
-        text = "$rating | $type | ${genres.joinToString(separator = ",") { it }}"
-    )
-
 }
 
 @Preview(showBackground = true, name = "Episode item example")

@@ -16,8 +16,8 @@ import com.pablo.tvschedule.ui.home.HomeScreen
 fun TvScheduleNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    startDestination: String = Screen.Home.route,
     navigationActions: TvScheduleActions,
-    startDestination: String = Screen.Home.route
 ) {
 
     NavHost(
