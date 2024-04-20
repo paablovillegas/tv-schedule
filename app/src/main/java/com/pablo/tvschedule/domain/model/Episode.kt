@@ -11,7 +11,7 @@ data class Episode(
     val rating: Double?,
     val image: String?,
     val summary: String?,
-    val show: Show,
+    val show: Show?,
 )
 
 fun getEpisode() = Episode(

@@ -41,15 +41,15 @@ fun EpisodeItem(
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ShowImage(
-                name = episode.show.name,
-                image = episode.show.image
+                name = episode.show?.name,
+                image = episode.show?.image
             )
             Column(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 EpisodeData(episode = episode)
                 ShowData(show = episode.show)
-                EpisodeSummary(description = episode.summary)
+                EpisodeSummary(summary = episode.summary)
             }
         }
     }
@@ -57,9 +57,11 @@ fun EpisodeItem(
 
 @Composable
 fun ShowImage(
-    name: String,
-    image: String
+    name: String?,
+    image: String?
 ) {
+    image ?: return
+
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(image)

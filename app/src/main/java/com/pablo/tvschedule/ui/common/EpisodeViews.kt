@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -89,20 +90,28 @@ fun EpisodeData(
 }
 
 @Composable
-fun EpisodeSummary(description: String?) {
-    description ?: return
+fun EpisodeSummary(
+    summary: String?,
+    cropText: Boolean = true
+) {
+    summary ?: return
 
     Text(
-        text = HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            .toString(),
+        text = summary,
         style = TextStyle(
             fontStyle = FontStyle.Italic
-        )
+        ),
+        maxLines = if(cropText) 4 else Int.MAX_VALUE,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EpisodeSummaryPreview() {
-    EpisodeData(episode = getEpisode())
+    val episode = getEpisode()
+    Column {
+        EpisodeData(episode = episode)
+        EpisodeSummary(summary = episode.summary)
+    }
 }

@@ -4,13 +4,13 @@ data class Show(
     val id: Int,
     val name: String,
     val type: String,
-    val language: String,
+    val language: String?,
     val genres: String,
     val premiered: String,
-    val ended: String,
+    val ended: String?,
     val rating: Double,
-    val image: String,
-    val summary: String,
+    val image: String?,
+    val summary: String?,
 )
 
 fun getShow() = Show(

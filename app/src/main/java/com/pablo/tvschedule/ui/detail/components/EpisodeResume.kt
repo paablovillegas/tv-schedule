@@ -3,11 +3,13 @@ package com.pablo.tvschedule.ui.detail.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
@@ -28,9 +30,13 @@ fun EpisodeResume(
         modifier = modifier
     ) {
         EpisodeImage(episode = episode)
-        EpisodeData(episode = episode)
-        ShowData(show = episode.show)
-        EpisodeSummary(description = episode.summary)
+        Column(
+            modifier = Modifier.padding(all = 4.dp)
+        ) {
+            EpisodeData(episode = episode)
+            ShowData(show = episode.show)
+            EpisodeSummary(summary = episode.summary, cropText = false)
+        }
     }
 }
 

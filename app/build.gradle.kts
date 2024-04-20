@@ -73,4 +73,5 @@ dependencies {
     implementation(libs.hilt.navigation)
     implementation(libs.navigation.compose)
     implementation(libs.coil.compose)
+    implementation(libs.jsoup)
 }

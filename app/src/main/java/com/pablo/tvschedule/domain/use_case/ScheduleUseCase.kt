@@ -9,7 +9,7 @@ import javax.inject.Inject
 class ScheduleUseCase @Inject constructor(
     private val repository: ScheduleRepository
 ) {
-    operator fun invoke(country: String, date: String): Flow<Result<List<Episode>>> {
+    suspend operator fun invoke(country: String, date: String): Result<List<Episode>> {
         return repository.getSchedule(country, date)
     }
 }

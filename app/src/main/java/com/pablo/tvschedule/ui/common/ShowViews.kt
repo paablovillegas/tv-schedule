@@ -10,7 +10,9 @@ import com.pablo.tvschedule.domain.model.Show
 import com.pablo.tvschedule.domain.model.getShow
 
 @Composable
-fun ShowData(show: Show) {
+fun ShowData(show: Show?) {
+    show ?: return
+
     Column {
         Text(
             text = "${show.name} (${show.premiered} - ${show.ended ?: ""})",
@@ -19,14 +21,15 @@ fun ShowData(show: Show) {
             )
         )
         Text(
-            text = "${show.type} | ${show.genres}",
+            text = listOfNotNull(show.type, show.genres)
+                .filterNot { it.isBlank() }
+                .joinToString(separator = " | ") { it },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary
             )
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -38,7 +38,6 @@ class DetailViewModel @Inject constructor(
                         }
 
                         is Result.Success -> {
-                            Log.i("fetch_ep", "${result.data}")
                             state = state.copy(
                                 isLoading = false,
                                 episode = result.data

@@ -75,7 +75,7 @@ fun HomeContent(
         LazyColumn {
             items(episodes.size) { index ->
                 EpisodeItem(episode = episodes[index]) {
-                    onEpisodeClick(index + 1)
+                    onEpisodeClick(it)
                 }
             }
         }

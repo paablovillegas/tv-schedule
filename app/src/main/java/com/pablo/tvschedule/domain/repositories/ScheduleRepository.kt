@@ -5,5 +5,5 @@ import com.pablo.tvschedule.domain.model.Episode
 import kotlinx.coroutines.flow.Flow
 
 interface ScheduleRepository {
-    fun getSchedule(country: String, date: String): Flow<Result<List<Episode>>>
+    suspend fun getSchedule(country: String, date: String): Result<List<Episode>>
 }

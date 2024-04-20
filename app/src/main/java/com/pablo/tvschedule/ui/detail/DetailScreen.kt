@@ -12,11 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pablo.tvschedule.domain.model.getEpisode
+import com.pablo.tvschedule.R
+import com.pablo.tvschedule.ui.common.LoadingContent
 import com.pablo.tvschedule.ui.detail.components.EpisodeResume
 
 @Composable
@@ -26,13 +27,35 @@ fun DetailScreen(
 ) {
     val state = viewModel.state
 
+    DetailScreen(
+        state = state,
+        navigateBack = navigateBack
+    )
+
+}
+
+@Composable
+private fun DetailScreen(
+    state: DetailState,
+    navigateBack: () -> Unit = { }
+) {
     Scaffold(
-        topBar = { DetailTopBar(title = state.episode?.name ?: "") { navigateBack() } }
+        topBar = {
+            DetailTopBar(
+                title = state.episode?.name ?: stringResource(id = R.string.app_name)
+            ) {
+                navigateBack()
+            }
+        }
     ) {
-        EpisodeResume(
-            modifier = Modifier.padding(paddingValues = it),
-            episode = state.episode
-        )
+        if (state.isLoading) {
+            LoadingContent()
+        } else {
+            EpisodeResume(
+                modifier = Modifier.padding(paddingValues = it),
+                episode = state.episode
+            )
+        }
     }
 }
 
@@ -65,5 +88,9 @@ fun DetailTopBar(
 @Preview
 @Composable
 private fun DetailScreenPreview() {
-    DetailScreen()
+    val state = DetailState(
+        isLoading = true
+    )
+
+    DetailScreen(state = state)
 }

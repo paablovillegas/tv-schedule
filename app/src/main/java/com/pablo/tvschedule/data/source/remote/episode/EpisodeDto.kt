@@ -1,6 +1,7 @@
 package com.pablo.tvschedule.data.source.remote.episode
 
 import com.pablo.tvschedule.domain.model.Episode
+import org.jsoup.Jsoup
 
 data class EpisodeDto(
     val id: Int,
@@ -11,9 +12,10 @@ data class EpisodeDto(
     val airtime: String,
     val runtime: Int,
     val rating: Rating,
-    val image: Image,
-    val summary: String,
-    val _embedded: Embedded,
+    val image: Image?,
+    val summary: String?,
+    val _embedded: Embedded?,
+    val show: ShowDto?,
 ) {
     fun toEpisode() = Episode(
         id = id,
@@ -23,9 +25,15 @@ data class EpisodeDto(
         airDate = airdate,
         airTime = airtime,
         runtime = runtime,
-        rating = rating.average,
-        image = image.medium,
-        summary = summary,
-        show = _embedded.show.toShow()
+        rating = if (rating.average > 0) rating.average else null,
+        image = image?.medium,
+        summary = parseSummary(),
+        show = show?.toShow() ?: _embedded?.show?.toShow()
     )
+
+    private fun parseSummary(): String? {
+        return this.summary?.let {
+            Jsoup.parse(it).text()
+        }
+    }
 }

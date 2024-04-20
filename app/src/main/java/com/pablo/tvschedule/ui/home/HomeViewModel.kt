@@ -33,10 +33,9 @@ class HomeViewModel @Inject constructor(
 
     fun getSchedule() {
         viewModelScope.launch {
-            getScheduleUseCase("US", "2022-01-01").onEach { result ->
+            getScheduleUseCase("US", "2022-01-01").also { result ->
                 when (result) {
                     is Result.Success -> {
-                        Log.i("fetch_complete", "${result.data?.size}")
                         state = state.copy(
                             isLoading = false,
                             schedule = result.data ?: emptyList()
@@ -51,7 +50,8 @@ class HomeViewModel @Inject constructor(
 
                     is Result.Error -> {
                         state = state.copy(
-                            isLoading = false
+                            isLoading = false,
+                            schedule = emptyList()
                         )
                     }
                 }
