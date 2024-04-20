@@ -10,7 +10,7 @@ interface ScheduleApi {
 
     @GET("schedule")
     suspend fun getSchedule(
-        //@Query("country") country: String,
-        //@Query("date") date: String
+        @Query("country") country: String,
+        @Query("date") date: String
     ): List<EpisodeDto>
 }

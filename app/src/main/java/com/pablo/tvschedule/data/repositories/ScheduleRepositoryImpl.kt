@@ -12,13 +12,13 @@ class ScheduleRepositoryImpl @Inject constructor(
 ) : ScheduleRepository {
     override suspend fun getSchedule(country: String, date: String): Result<List<Episode>> {
         val response = try {
-            scheduleApi.getSchedule()
+            scheduleApi.getSchedule(country, date)
                 .map { it.toEpisode() }
         } catch (e: Exception) {
             Log.i("fetch_complete", "Error ${e.stackTraceToString()}")
             return Result.Error(message = e.stackTraceToString())
         }
-        Log.i("fetch_complete", "Error $response")
+        Log.i("fetch_complete", "Success $response")
         return Result.Success(data = response)
     }
 }

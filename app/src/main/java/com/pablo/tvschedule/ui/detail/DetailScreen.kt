@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.R
@@ -47,12 +48,14 @@ private fun DetailScreen(
                 navigateBack()
             }
         }
-    ) {
+    ) { paddingValues ->
         if (state.isLoading) {
-            LoadingContent()
+            LoadingContent(
+                modifier = Modifier.padding(paddingValues = paddingValues)
+            )
         } else {
             EpisodeResume(
-                modifier = Modifier.padding(paddingValues = it),
+                modifier = Modifier.padding(paddingValues = paddingValues),
                 episode = state.episode
             )
         }
@@ -67,7 +70,11 @@ fun DetailTopBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = title)
+            Text(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,

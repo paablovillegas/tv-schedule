@@ -18,7 +18,7 @@ class EpisodeRepositoryImpl @Inject constructor(
             Log.i("fetch_complete", "Error ${e.stackTraceToString()}")
             return Result.Error(message = e.stackTraceToString())
         }
-        Log.i("fetch_complete", "Error $response")
+        Log.i("fetch_complete", "Success $response")
         return Result.Success(data = response)
     }
 }

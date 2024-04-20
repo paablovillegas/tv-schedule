@@ -13,10 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.R
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
+import com.pablo.tvschedule.ui.common.LoadingContent
 import com.pablo.tvschedule.ui.home.components.EpisodeItem
 
 @Composable
@@ -27,24 +30,30 @@ fun HomeScreen(
     val state = viewModel.state
 
     HomeScreen(
-        episodes = state.schedule
+        state = state
     ) { onEpisodeClick(it) }
 
 }
 
 @Composable
 private fun HomeScreen(
-    episodes: List<Episode>,
+    state: HomeState,
     onEpisodeClick: (Int) -> Unit = { },
 ) {
     Scaffold(
         topBar = { HomeTopBar() }
     ) { paddingValues ->
-        HomeContent(
-            modifier = Modifier.padding(paddingValues = paddingValues),
-            episodes = episodes,
-            onEpisodeClick = onEpisodeClick
-        )
+        if (state.isLoading) {
+            LoadingContent(
+                modifier = Modifier.padding(paddingValues = paddingValues)
+            )
+        } else {
+            HomeContent(
+                modifier = Modifier.padding(paddingValues = paddingValues),
+                schedule = state.schedule,
+                onEpisodeClick = onEpisodeClick
+            )
+        }
     }
 }
 
@@ -65,7 +74,7 @@ fun HomeTopBar() {
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    episodes: List<Episode>,
+    schedule: List<Episode>,
     onEpisodeClick: (Int) -> Unit = { }
 ) {
 
@@ -73,8 +82,8 @@ fun HomeContent(
         modifier = modifier
     ) {
         LazyColumn {
-            items(episodes.size) { index ->
-                EpisodeItem(episode = episodes[index]) {
+            items(schedule.size) { index ->
+                EpisodeItem(episode = schedule[index]) {
                     onEpisodeClick(it)
                 }
             }
@@ -84,7 +93,20 @@ fun HomeContent(
 
 @Preview
 @Composable
-private fun HomeScreenPreview() {
-    HomeScreen()
+private fun HomeScreenPreview(
+    @PreviewParameter(HomeScreenParameterProvider::class) state: HomeState
+) {
+    HomeScreen(state = state)
 }
 
+class HomeScreenParameterProvider : PreviewParameterProvider<HomeState> {
+    override val values = sequenceOf(
+        HomeState(
+            isLoading = true
+        ),
+        HomeState(
+            isLoading = false,
+            schedule = listOf(getEpisode(), getEpisode(), getEpisode())
+        )
+    )
+}
