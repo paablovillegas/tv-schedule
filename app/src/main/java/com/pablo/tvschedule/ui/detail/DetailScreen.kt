@@ -12,23 +12,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.domain.model.getEpisode
 import com.pablo.tvschedule.ui.detail.components.EpisodeResume
 
 @Composable
 fun DetailScreen(
+    viewModel: DetailViewModel = hiltViewModel(),
     navigateBack: () -> Unit = { }
 ) {
-    val episode = getEpisode()
+    val state = viewModel.state
 
     Scaffold(
-        topBar = { DetailTopBar(title = episode.name) { navigateBack() } }
+        topBar = { DetailTopBar(title = state.episode?.name ?: "") { navigateBack() } }
     ) {
         EpisodeResume(
             modifier = Modifier.padding(paddingValues = it),
-            episode = episode
+            episode = state.episode
         )
     }
 }

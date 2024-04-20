@@ -26,9 +26,11 @@ fun TvScheduleNavGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen { id ->
-                navigationActions.navigateToDetail(id)
-            }
+            HomeScreen(
+                onEpisodeClick = { id ->
+                    navigationActions.navigateToDetail(id)
+                }
+            )
         }
         composable(
             route = Screen.Detail.route,

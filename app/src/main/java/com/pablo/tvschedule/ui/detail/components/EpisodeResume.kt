@@ -20,8 +20,10 @@ import com.pablo.tvschedule.ui.common.ShowData
 @Composable
 fun EpisodeResume(
     modifier: Modifier = Modifier,
-    episode: Episode
+    episode: Episode?
 ) {
+    episode ?: return
+
     Column(
         modifier = modifier
     ) {

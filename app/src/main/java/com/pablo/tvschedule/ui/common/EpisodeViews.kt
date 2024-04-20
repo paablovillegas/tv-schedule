@@ -25,7 +25,6 @@ import androidx.core.text.HtmlCompat
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
 
-
 @Composable
 fun EpisodeData(
     modifier: Modifier = Modifier,
@@ -74,7 +73,7 @@ fun EpisodeData(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Duration: ${episode.runTime} min.",
+                text = "Duration: ${episode.runtime} min.",
                 style = TextStyle(
                     fontWeight = FontWeight.Light
                 )

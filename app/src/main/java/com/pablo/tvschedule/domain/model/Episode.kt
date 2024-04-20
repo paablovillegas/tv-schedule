@@ -7,7 +7,7 @@ data class Episode(
     val number: Int,
     val airDate: String,
     val airTime: String,
-    val runTime: Int,
+    val runtime: Int,
     val rating: Double?,
     val image: String?,
     val summary: String?,
@@ -16,14 +16,14 @@ data class Episode(
 
 fun getEpisode() = Episode(
     id = 1,
-    name = "Lost & Found",
-    season = 5,
-    number = 11,
-    airDate = "2024-04-18",
-    airTime = "00:00",
-    runTime = 60,
-    rating = 7.5,
-    image = null,
-    summary = "While one front is rained on by flames, the other is battered by boulders. With no way out and limited options, the Scouts are forced to fight against the Titans with little hope left.",
+    name = "The Change Constant",
+    season = 12,
+    number = 23,
+    airDate = "2019-05-16",
+    airTime = "20:00",
+    runtime = 30,
+    rating = 7.6,
+    image = "https://static.tvmaze.com/uploads/images/medium_landscape/197/493238.jpg",
+    summary = "\u003Cp\u003ESheldon and Amy await big news.\u003C/p\u003E",
     show = getShow()
 )

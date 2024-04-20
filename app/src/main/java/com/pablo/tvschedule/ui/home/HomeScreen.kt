@@ -13,24 +13,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.R
+import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
 import com.pablo.tvschedule.ui.home.components.EpisodeItem
 
 @Composable
 fun HomeScreen(
-    onEpisodeClick: (Int) -> Unit = { }
+    onEpisodeClick: (Int) -> Unit = { },
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    val state = viewModel.state
+
+    HomeScreen(
+        episodes = state.schedule
+    ) { onEpisodeClick(it) }
+
+}
+
+@Composable
+private fun HomeScreen(
+    episodes: List<Episode>,
+    onEpisodeClick: (Int) -> Unit = { },
 ) {
     Scaffold(
         topBar = { HomeTopBar() }
     ) { paddingValues ->
         HomeContent(
-            modifier = Modifier.padding(paddingValues = paddingValues)
-        ) {
-            onEpisodeClick(it)
-        }
+            modifier = Modifier.padding(paddingValues = paddingValues),
+            episodes = episodes,
+            onEpisodeClick = onEpisodeClick
+        )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,17 +65,9 @@ fun HomeTopBar() {
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
+    episodes: List<Episode>,
     onEpisodeClick: (Int) -> Unit = { }
 ) {
-    val episodes = listOf(
-        getEpisode(),
-        getEpisode(),
-        getEpisode(),
-        getEpisode(),
-        getEpisode(),
-        getEpisode(),
-        getEpisode(),
-    )
 
     Column(
         modifier = modifier
@@ -68,7 +75,7 @@ fun HomeContent(
         LazyColumn {
             items(episodes.size) { index ->
                 EpisodeItem(episode = episodes[index]) {
-                    onEpisodeClick(it)
+                    onEpisodeClick(index + 1)
                 }
             }
         }

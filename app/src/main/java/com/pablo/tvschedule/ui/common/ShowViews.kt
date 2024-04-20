@@ -19,7 +19,7 @@ fun ShowData(show: Show) {
             )
         )
         Text(
-            text = "${show.type} | ${show.genres.joinToString(separator = ",") { it }}",
+            text = "${show.type} | ${show.genres}",
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary
             )
