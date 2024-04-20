@@ -1,6 +1,7 @@
 package com.pablo.tvschedule.data.source.remote.dto
 
-data class Previousepisode(
-    val href: String,
+data class Character(
+    val id: Int,
+    val image: Image,
     val name: String
 )

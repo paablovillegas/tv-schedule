@@ -1,3 +1,5 @@
 package com.pablo.tvschedule.data.source.remote.dto
 
-class EpisodesList : ArrayList<EpisodesDto>()
+data class Embedded(
+    val show: ShowDto
+)

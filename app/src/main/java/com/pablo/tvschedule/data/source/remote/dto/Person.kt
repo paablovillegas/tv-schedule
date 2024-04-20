@@ -1,8 +1,7 @@
 package com.pablo.tvschedule.data.source.remote.dto
 
-data class WebChannel(
-    val country: Country,
+data class Person(
     val id: Int,
     val name: String,
-    val officialSite: String
+    val image: Image
 )

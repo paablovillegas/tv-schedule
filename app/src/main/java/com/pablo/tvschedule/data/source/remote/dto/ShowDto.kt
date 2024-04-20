@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.data.source.remote.episode
+package com.pablo.tvschedule.data.source.remote.dto
 
 import com.pablo.tvschedule.domain.model.Show
 import org.jsoup.Jsoup

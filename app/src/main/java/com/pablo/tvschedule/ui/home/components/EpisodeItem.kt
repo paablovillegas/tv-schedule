@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.pablo.tvschedule.R
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
 import com.pablo.tvschedule.ui.common.EpisodeData
@@ -60,11 +61,9 @@ fun ShowImage(
     name: String?,
     image: String?
 ) {
-    image ?: return
-
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(image)
+            .data(image ?: R.drawable.ic_launcher_background)
             .size(Size.ORIGINAL)
             .build()
     )

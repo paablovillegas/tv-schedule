@@ -1,9 +1,7 @@
 package com.pablo.tvschedule.data.source.remote
 
-import com.pablo.tvschedule.data.source.remote.dto.EpisodesList
-import com.pablo.tvschedule.data.source.remote.episode.EpisodeDto
+import com.pablo.tvschedule.data.source.remote.dto.EpisodeDto
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScheduleApi {
