@@ -20,7 +20,7 @@ import com.pablo.tvschedule.ui.common.EpisodeSummary
 import com.pablo.tvschedule.ui.common.ShowData
 
 @Composable
-fun EpisodeResume(
+fun EpisodeDetail(
     modifier: Modifier = Modifier,
     episode: Episode?
 ) {
@@ -67,6 +67,6 @@ fun EpisodeDetail(episode: Episode) {
 
 @Preview
 @Composable
-private fun Preview1() {
-    EpisodeResume(episode = getEpisode())
+private fun EpisodeDetailPreview() {
+    EpisodeDetail(episode = getEpisode())
 }

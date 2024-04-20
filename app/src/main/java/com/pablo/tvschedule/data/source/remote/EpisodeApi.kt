@@ -6,7 +6,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EpisodeApi {
-
     @GET("episodes/{id}")
     suspend fun getEpisode(
         @Path("id") id: Int,

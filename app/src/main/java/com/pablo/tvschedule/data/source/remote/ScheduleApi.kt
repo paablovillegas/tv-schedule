@@ -5,7 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ScheduleApi {
-
     @GET("schedule")
     suspend fun getSchedule(
         @Query("country") country: String,

@@ -1,6 +1,8 @@
 package com.pablo.tvschedule.ui.detail
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.R
 import com.pablo.tvschedule.ui.common.LoadingContent
-import com.pablo.tvschedule.ui.detail.components.EpisodeResume
+import com.pablo.tvschedule.ui.detail.components.ActorItem
+import com.pablo.tvschedule.ui.detail.components.EpisodeDetail
 
 @Composable
 fun DetailScreen(
@@ -54,10 +57,18 @@ private fun DetailScreen(
                 modifier = Modifier.padding(paddingValues = paddingValues)
             )
         } else {
-            EpisodeResume(
-                modifier = Modifier.padding(paddingValues = paddingValues),
-                episode = state.episode
-            )
+            Column {
+                EpisodeDetail(
+                    modifier = Modifier.padding(paddingValues = paddingValues),
+                    episode = state.episode
+                )
+                Text(text = "Cast")
+                LazyColumn {
+                    items(state.cast.size) { index ->
+                        ActorItem(actor = state.cast[index])
+                    }
+                }
+            }
         }
     }
 }

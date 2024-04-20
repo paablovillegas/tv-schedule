@@ -1,6 +1,5 @@
 package com.pablo.tvschedule.ui.home.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,19 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
-import coil.size.Size
-import com.pablo.tvschedule.R
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
 import com.pablo.tvschedule.ui.common.EpisodeData
 import com.pablo.tvschedule.ui.common.EpisodeSummary
 import com.pablo.tvschedule.ui.common.ShowData
+import com.pablo.tvschedule.ui.common.ShowImage
 
 @Composable
 fun EpisodeItem(
@@ -42,8 +36,11 @@ fun EpisodeItem(
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ShowImage(
-                name = episode.show?.name,
-                image = episode.show?.image
+                image = episode.show?.image,
+                contentDescription = episode.show?.name,
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(150.dp)
             )
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -54,28 +51,6 @@ fun EpisodeItem(
             }
         }
     }
-}
-
-@Composable
-fun ShowImage(
-    name: String?,
-    image: String?
-) {
-    val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(image ?: R.drawable.ic_launcher_background)
-            .size(Size.ORIGINAL)
-            .build()
-    )
-
-    Image(
-        painter = painter,
-        contentDescription = name,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .width(90.dp)
-            .height(150.dp)
-    )
 }
 
 @Preview(showBackground = true, name = "Episode item example")
