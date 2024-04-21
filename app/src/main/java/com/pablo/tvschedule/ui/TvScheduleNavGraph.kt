@@ -8,8 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.pablo.tvschedule.ui.detail.DetailScreen
-import com.pablo.tvschedule.ui.home.HomeScreen
+import com.pablo.tvschedule.presentation.detail.DetailScreen
+import com.pablo.tvschedule.presentation.home.HomeScreen
+import com.pablo.tvschedule.presentation.search.SearchScreen
 
 
 @Composable
@@ -29,6 +30,9 @@ fun TvScheduleNavGraph(
             HomeScreen(
                 onEpisodeClick = { id ->
                     navigationActions.navigateToDetail(id)
+                },
+                onSearchClick = {
+                    navigationActions.navigateToSearch()
                 }
             )
         }
@@ -39,8 +43,13 @@ fun TvScheduleNavGraph(
             )
         ) {
             DetailScreen {
-                navigationActions.navigateToHome()
+                navController.popBackStack()
             }
+        }
+        composable(
+            route = Screen.Search.route,
+        ) {
+            SearchScreen()
         }
     }
 }

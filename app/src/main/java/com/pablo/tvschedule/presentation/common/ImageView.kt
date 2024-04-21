@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.common
+package com.pablo.tvschedule.presentation.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -11,7 +11,7 @@ import coil.size.Size
 import com.pablo.tvschedule.R
 
 @Composable
-fun ShowImage(
+fun ImagePainter(
     modifier: Modifier = Modifier,
     contentDescription: String?,
     image: String?

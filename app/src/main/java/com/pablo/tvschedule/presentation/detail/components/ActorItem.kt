@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.detail.components
+package com.pablo.tvschedule.presentation.detail.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,16 +19,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pablo.tvschedule.domain.model.Actor
 import com.pablo.tvschedule.domain.model.getActor
-import com.pablo.tvschedule.ui.common.ShowImage
+import com.pablo.tvschedule.presentation.common.ImagePainter
 
 @Composable
 fun ActorItem(
     modifier: Modifier = Modifier,
     actor: Actor,
-    onItemClick: (Int) -> Unit = { }
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        ShowImage(
+        ImagePainter(
             image = actor.image,
             contentDescription = actor.characterName,
             modifier = Modifier

@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.detail
+package com.pablo.tvschedule.presentation.detail
 
 import com.pablo.tvschedule.domain.model.Actor
 import com.pablo.tvschedule.domain.model.Episode

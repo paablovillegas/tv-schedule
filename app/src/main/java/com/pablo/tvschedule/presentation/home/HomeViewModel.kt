@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.home
+package com.pablo.tvschedule.presentation.home
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +9,8 @@ import com.pablo.tvschedule.data.Result
 import com.pablo.tvschedule.domain.use_case.ScheduleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,16 +18,16 @@ class HomeViewModel @Inject constructor(
     private val getScheduleUseCase: ScheduleUseCase
 ) : ViewModel() {
 
-    var state by mutableStateOf(HomeState(isLoading = true))
+    var state by mutableStateOf(HomeState())
         private set
 
     init {
         getSchedule()
     }
 
-    fun getSchedule() {
+    private fun getSchedule() {
         viewModelScope.launch {
-            getScheduleUseCase("GB", "2022-01-01").also { result ->
+            getScheduleUseCase("US", state.formatDate()).also { result ->
                 when (result) {
                     is Result.Success -> {
                         state = state.copy(
@@ -49,5 +51,28 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun showDatePicker() {
+        state = state.copy(
+            showDatePickerDialog = true
+        )
+    }
+
+    fun hideDatePicker() {
+        state = state.copy(
+            showDatePickerDialog = false
+        )
+    }
+
+    fun setDate(dateInMillis: Long) {
+        val date = Instant.ofEpochMilli(dateInMillis)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        state = state.copy(
+            isLoading = true,
+            date = date
+        )
+        getSchedule()
     }
 }

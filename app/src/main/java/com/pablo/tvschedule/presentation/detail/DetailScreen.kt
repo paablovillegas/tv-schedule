@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.detail
+package com.pablo.tvschedule.presentation.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -20,9 +20,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.R
-import com.pablo.tvschedule.ui.common.LoadingContent
-import com.pablo.tvschedule.ui.detail.components.ActorItem
-import com.pablo.tvschedule.ui.detail.components.EpisodeDetail
+import com.pablo.tvschedule.presentation.common.LoadingContent
+import com.pablo.tvschedule.presentation.detail.components.ActorItem
+import com.pablo.tvschedule.presentation.detail.components.EpisodeDetail
 
 @Composable
 fun DetailScreen(

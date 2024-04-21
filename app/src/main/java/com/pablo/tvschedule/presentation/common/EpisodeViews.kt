@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.common
+package com.pablo.tvschedule.presentation.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

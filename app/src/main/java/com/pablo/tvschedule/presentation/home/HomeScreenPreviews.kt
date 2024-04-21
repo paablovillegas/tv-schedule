@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.home
+package com.pablo.tvschedule.presentation.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

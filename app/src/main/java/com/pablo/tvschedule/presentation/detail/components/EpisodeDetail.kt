@@ -1,8 +1,9 @@
-package com.pablo.tvschedule.ui.detail.components
+package com.pablo.tvschedule.presentation.detail.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,9 +16,10 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
-import com.pablo.tvschedule.ui.common.EpisodeData
-import com.pablo.tvschedule.ui.common.EpisodeSummary
-import com.pablo.tvschedule.ui.common.ShowData
+import com.pablo.tvschedule.presentation.common.EpisodeData
+import com.pablo.tvschedule.presentation.common.EpisodeSummary
+import com.pablo.tvschedule.presentation.common.ImagePainter
+import com.pablo.tvschedule.presentation.common.ShowData
 
 @Composable
 fun EpisodeDetail(
@@ -29,7 +31,13 @@ fun EpisodeDetail(
     Column(
         modifier = modifier
     ) {
-        EpisodeImage(episode = episode)
+        ImagePainter(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            contentDescription = episode.name,
+            image = episode.image
+        )
         Column(
             modifier = Modifier.padding(all = 4.dp)
         ) {
@@ -38,26 +46,6 @@ fun EpisodeDetail(
             EpisodeSummary(summary = episode.summary, cropText = false)
         }
     }
-}
-
-@Composable
-fun EpisodeImage(episode: Episode) {
-    episode.image ?: return
-
-    val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(episode.image)
-            .size(Size.ORIGINAL)
-            .build()
-    )
-
-    Image(
-        painter = painter,
-        contentDescription = episode.name,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .fillMaxWidth()
-    )
 }
 
 @Composable

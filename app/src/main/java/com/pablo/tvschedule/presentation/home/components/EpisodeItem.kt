@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.home.components
+package com.pablo.tvschedule.presentation.home.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pablo.tvschedule.domain.model.Episode
 import com.pablo.tvschedule.domain.model.getEpisode
-import com.pablo.tvschedule.ui.common.EpisodeData
-import com.pablo.tvschedule.ui.common.EpisodeSummary
-import com.pablo.tvschedule.ui.common.ShowData
-import com.pablo.tvschedule.ui.common.ShowImage
+import com.pablo.tvschedule.presentation.common.EpisodeData
+import com.pablo.tvschedule.presentation.common.EpisodeSummary
+import com.pablo.tvschedule.presentation.common.ShowData
+import com.pablo.tvschedule.presentation.common.ImagePainter
 
 @Composable
 fun EpisodeItem(
@@ -35,7 +35,7 @@ fun EpisodeItem(
             ),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ShowImage(
+            ImagePainter(
                 image = episode.show?.image,
                 contentDescription = episode.show?.name,
                 modifier = Modifier

@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.ui.detail
+package com.pablo.tvschedule.presentation.detail
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
