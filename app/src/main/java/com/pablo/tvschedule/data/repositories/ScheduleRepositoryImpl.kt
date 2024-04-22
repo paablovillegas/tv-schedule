@@ -10,10 +10,11 @@ import javax.inject.Inject
 class ScheduleRepositoryImpl @Inject constructor(
     private val scheduleApi: ScheduleApi
 ) : ScheduleRepository {
-    override suspend fun getSchedule(country: String, date: String): Result<List<Episode>> {
+    override suspend fun getSchedule(country: String, date: String): Result<Map<String, List<Episode>>> {
         val response = try {
             scheduleApi.getSchedule(country, date)
                 .map { it.toEpisode() }
+                .groupBy { it.airTime }
         } catch (e: Exception) {
             Log.i("fetch_complete", "Error ${e.stackTraceToString()}")
             return Result.Error(message = e.stackTraceToString())

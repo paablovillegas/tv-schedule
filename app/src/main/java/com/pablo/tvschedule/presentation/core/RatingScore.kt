@@ -28,6 +28,7 @@ fun RatingScore(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
     ) {
         Icon(
             imageVector = Icons.Filled.Star,
@@ -44,8 +45,7 @@ fun RatingScore(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold
             ),
-            textAlign = TextAlign.End,
-            modifier = modifier.testTag("episodeRating")
+            textAlign = TextAlign.End
         )
     }
 }

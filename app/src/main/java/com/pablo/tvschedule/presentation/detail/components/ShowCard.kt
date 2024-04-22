@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -72,7 +73,10 @@ private fun ShowCardDetail(
                 ),
                 modifier = Modifier.weight(1f)
             )
-            RatingScore(rating = show.rating)
+            RatingScore(
+                rating = show.rating,
+                modifier = Modifier.testTag("showItemRating")
+            )
         }
         Text(
             text = listOfNotNull(show.type, show.genres)
@@ -80,13 +84,15 @@ private fun ShowCardDetail(
                 .joinToString(separator = " | ") { it },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary
-            )
+            ),
+            modifier = Modifier.testTag("showItemTypeGenres")
         )
         Text(
             text = "Avg duration: ${show.runtime} min.",
             style = TextStyle(
                 fontWeight = FontWeight.Light
-            )
+            ),
+            modifier = Modifier.testTag("showItemDuration")
         )
         show.summary?.let { summary ->
             Text(
@@ -95,7 +101,8 @@ private fun ShowCardDetail(
                     fontStyle = FontStyle.Italic
                 ),
                 maxLines = 4,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.testTag("showItemSummary")
             )
         }
     }

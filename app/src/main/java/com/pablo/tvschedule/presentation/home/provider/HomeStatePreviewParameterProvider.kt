@@ -12,7 +12,7 @@ class HomeStatePreviewParameterProvider : PreviewParameterProvider<HomeState> {
         ),
         HomeState(
             isLoading = false,
-            schedule = EpisodePreviewParameterProvider().values.toList(),
+            filteredSchedule = mapOf("09:00" to EpisodePreviewParameterProvider().values.toList()),
             date = LocalDate.now()
         )
     )

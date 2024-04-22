@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,8 @@ fun EpisodeCard(
     episode: Episode?,
     orientation: EpisodeCardOrientation = EpisodeCardOrientation.HORIZONTAL,
     includeShowDetails: Boolean = true,
+    includeAirTime: Boolean = true,
+    summaryMaxLines: Int = Int.MAX_VALUE,
     onItemClick: (Int) -> Unit = { }
 ) {
     episode ?: return
@@ -73,11 +76,17 @@ fun EpisodeCard(
                         top = if (isHorizontalCard) 6.dp else 0.dp,
                     ),
             ) {
-                EpisodeCardDetail(episode = episode)
+                EpisodeCardDetail(
+                    episode = episode,
+                    includeAirTime = includeAirTime
+                )
                 if (includeShowDetails) {
                     ShowData(show = episode.show)
                 }
-                EpisodeSummary(summary = episode.summary)
+                EpisodeSummary(
+                    summary = episode.summary,
+                    maxLines = summaryMaxLines
+                )
             }
         }
 
@@ -96,7 +105,8 @@ fun EpisodeCard(
 @Composable
 private fun EpisodeCardDetail(
     modifier: Modifier = Modifier,
-    episode: Episode
+    episode: Episode,
+    includeAirTime: Boolean
 ) {
     Column {
         Row(
@@ -109,9 +119,14 @@ private fun EpisodeCardDetail(
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.primary
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag("episodeItemName")
             )
-            RatingScore(rating = episode.rating)
+            RatingScore(
+                modifier = Modifier.testTag("episodeItemRating"),
+                rating = episode.rating
+            )
         }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -121,14 +136,18 @@ private fun EpisodeCardDetail(
                 text = "Duration: ${episode.runtime} min.",
                 style = TextStyle(
                     fontWeight = FontWeight.Light
-                )
+                ),
+                modifier = Modifier.testTag("episodeItemDuration")
             )
-            Text(
-                text = episode.airTime,
-                style = TextStyle(
-                    fontWeight = FontWeight.Light
+            if (includeAirTime) {
+                Text(
+                    text = episode.airTime,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Light
+                    ),
+                    modifier = Modifier.testTag("episodeItemAirTime")
                 )
-            )
+            }
         }
     }
 }
@@ -142,7 +161,8 @@ private fun ShowData(show: Show?) {
             text = "${show.name} (${show.premiered} - ${show.ended ?: ""})",
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary
-            )
+            ),
+            modifier = Modifier.testTag("episodeItemShowTitle")
         )
         Text(
             text = listOfNotNull(show.type, show.genres)
@@ -150,7 +170,8 @@ private fun ShowData(show: Show?) {
                 .joinToString(separator = " | ") { it },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary
-            )
+            ),
+            modifier = Modifier.testTag("episodeItemShowTypeGenres")
         )
     }
 }
@@ -158,6 +179,7 @@ private fun ShowData(show: Show?) {
 @Composable
 private fun EpisodeSummary(
     summary: String?,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     summary ?: return
 
@@ -166,8 +188,9 @@ private fun EpisodeSummary(
         style = TextStyle(
             fontStyle = FontStyle.Italic
         ),
-        maxLines = 3,
-        overflow = TextOverflow.Ellipsis
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.testTag("episodeItemSummary")
     )
 }
 

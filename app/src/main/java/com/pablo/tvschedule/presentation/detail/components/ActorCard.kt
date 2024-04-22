@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -64,7 +65,8 @@ fun ActorSummary(actor: Actor) {
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary
-            )
+            ),
+            modifier = Modifier.testTag("actorItemCharacterName")
         )
         Text(
             buildAnnotatedString {
@@ -80,7 +82,8 @@ fun ActorSummary(actor: Actor) {
             },
             style = TextStyle(
                 fontSize = 16.sp
-            )
+            ),
+            modifier = Modifier.testTag("actorItemName")
         )
     }
 }

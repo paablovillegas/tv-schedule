@@ -5,28 +5,11 @@ import java.time.LocalDate
 
 data class HomeState(
     val isLoading: Boolean = true,
-    val schedule: List<Episode> = emptyList(),
     val showDatePickerDialog: Boolean = false,
+    val showTimePickerDialog: Boolean = true,
     val date: LocalDate = LocalDate.now(),
-    val secondSchedule: Map<String, List<Episode>> = mapOf()
-) {
-    fun formatDate(): String {
-        return buildString {
-            append(date.year)
-            append("-")
-            append(date.monthValue.toString().padStart(2, '0'))
-            append("-")
-            append(date.dayOfMonth.toString().padStart(2, '0'))
-        }
-    }
-
-    fun usFormatDate(): String {
-        return buildString {
-            append(date.month)
-            append(" ")
-            append(date.dayOfMonth)
-            append(", ")
-            append(date.year)
-        }
-    }
-}
+    val startHour: Int = 0,
+    val endHour: Int = 2359,
+    val schedule: Map<String, List<Episode>> = mapOf(),
+    val filteredSchedule: Map<String, List<Episode>> = mapOf()
+)

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +15,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,9 +25,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pablo.tvschedule.domain.model.Episode
+import com.pablo.tvschedule.R
+import com.pablo.tvschedule.presentation.core.CustomDropDownMenu
 import com.pablo.tvschedule.presentation.core.EpisodeCard
 import com.pablo.tvschedule.presentation.core.LoadingContent
+import com.pablo.tvschedule.presentation.core.fromHour
+import com.pablo.tvschedule.presentation.core.toHour
+import com.pablo.tvschedule.presentation.core.usFormatDate
 import com.pablo.tvschedule.presentation.home.components.CustomDatePickerDialog
 import com.pablo.tvschedule.presentation.home.components.HomeTopBar
 import com.pablo.tvschedule.presentation.home.provider.HomeStatePreviewParameterProvider
@@ -54,7 +62,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             HomeTopBar(
-                title = state.usFormatDate(),
+                title = state.date.usFormatDate(),
                 homeInteraction = homeInteraction
             )
         }
@@ -68,7 +76,7 @@ fun HomeScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
                 HomeContent(
-                    schedule = state.secondSchedule,
+                    state = state,
                     homeInteraction = homeInteraction
                 )
                 CustomDatePickerDialog(
@@ -81,12 +89,67 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    schedule: Map<String, List<Episode>>,
+    state: HomeState,
     homeInteraction: (HomeInteraction) -> Unit = { }
+) {
+    Column(
+        modifier = modifier.padding(
+            top = 8.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        HourSelector(
+            state = state,
+            homeInteraction = homeInteraction
+        )
+        ScheduleList(
+            state = state,
+            homeInteraction = homeInteraction
+        )
+    }
+}
+
+@Composable
+fun HourSelector(
+    modifier: Modifier = Modifier,
+    state: HomeState,
+    homeInteraction: (HomeInteraction) -> Unit
+) {
+    Row(
+        modifier = modifier.padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        CustomDropDownMenu(
+            modifier = Modifier.weight(1f),
+            label = stringResource(id = R.string.fromHour),
+            items = stringArrayResource(id = R.array.hours)
+                .filterNot { it.fromHour() > state.endHour },
+            isStartDate = true,
+            selectedTime = state.startHour.toHour(),
+            homeInteraction = homeInteraction
+        )
+
+        CustomDropDownMenu(
+            modifier = Modifier.weight(1f),
+            label = stringResource(id = R.string.toHour),
+            items = stringArrayResource(id = R.array.hours)
+                .filterNot { it.fromHour() < state.startHour },
+            isStartDate = false,
+            selectedTime = state.endHour.toHour(),
+            homeInteraction = homeInteraction
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ScheduleList(
+    modifier: Modifier = Modifier,
+    state: HomeState,
+    homeInteraction: (HomeInteraction) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -94,7 +157,7 @@ fun HomeContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
 
-        for ((time, episodes) in schedule) {
+        for ((time, episodes) in state.filteredSchedule) {
             stickyHeader {
                 Box(
                     modifier = Modifier
@@ -108,7 +171,8 @@ fun HomeContent(
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
-                        )
+                        ),
+                        modifier = Modifier.testTag("scheduleHourHeader")
                     )
                 }
             }
@@ -118,20 +182,18 @@ fun HomeContent(
                 ) {
 
                     for (episode in episodes) {
-                        EpisodeCard(episode = episode) { id ->
+                        EpisodeCard(
+                            modifier = Modifier.testTag("scheduleEpisodeItem"),
+                            episode = episode,
+                            includeAirTime = false,
+                            summaryMaxLines = 3
+                        ) { id ->
                             homeInteraction(HomeInteraction.EpisodeClick(id))
                         }
                     }
                 }
             }
         }
-
-        /*
-        items(schedule.size) { index ->
-            EpisodeCard(episode = schedule[index]) { id ->
-                homeInteraction(HomeInteraction.EpisodeClick(id))
-            }
-        } */
     }
 }
 
@@ -152,8 +214,23 @@ private fun getHomeInteraction(
             viewModel.hideDatePicker()
         }
 
+        is HomeInteraction.ShowTimePicker -> {
+            viewModel.showTimePicker()
+        }
+
+        is HomeInteraction.HideTimePicker -> {
+            viewModel.hideTimePicker()
+        }
+
         is HomeInteraction.ChangeScheduleDate -> {
             viewModel.setDate(interaction.dateInMillis)
+        }
+
+        is HomeInteraction.ChangeScheduleTime -> {
+            if (interaction.isStartDate)
+                viewModel.setStartHour(interaction.time)
+            else
+                viewModel.setEndHour(interaction.time)
         }
     }
 }

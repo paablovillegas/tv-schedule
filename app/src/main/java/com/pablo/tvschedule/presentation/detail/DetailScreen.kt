@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,9 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.R
-import com.pablo.tvschedule.presentation.core.LoadingContent
+import com.pablo.tvschedule.domain.model.Actor
+import com.pablo.tvschedule.domain.model.Episode
+import com.pablo.tvschedule.domain.model.Show
 import com.pablo.tvschedule.presentation.core.EpisodeCard
 import com.pablo.tvschedule.presentation.core.EpisodeCardOrientation
+import com.pablo.tvschedule.presentation.core.LoadingContent
 import com.pablo.tvschedule.presentation.detail.components.ActorCard
 import com.pablo.tvschedule.presentation.detail.components.ShowCard
 import com.pablo.tvschedule.presentation.detail.provider.DetailStatePreviewParameterProvider
@@ -75,59 +79,18 @@ private fun DetailScreen(
                     contentPadding = PaddingValues(vertical = 8.dp),
                 ) {
                     item {
-                        EpisodeCard(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            episode = state.episode,
-                            orientation = EpisodeCardOrientation.VERTICAL,
-                            includeShowDetails = false,
-                        )
+                        EpisodeSection(episode = state.episode)
                     }
 
                     state.episode?.show?.let { show ->
                         item {
-                            Text(
-                                text = "Show",
-                                style = TextStyle(
-                                    fontSize = 28.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                ),
-                                modifier = Modifier.padding(
-                                    start = 8.dp,
-                                    end = 8.dp,
-                                    top = 8.dp,
-                                )
-                            )
-                            ShowCard(
-                                show = show,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
+                            ShowSection(show)
                         }
                     }
 
                     if (state.cast.isNotEmpty()) {
                         item {
-                            Text(
-                                text = "Cast",
-                                style = TextStyle(
-                                    fontSize = 28.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                ),
-                                modifier = Modifier.padding(
-                                    start = 8.dp,
-                                    end = 8.dp,
-                                    top = 8.dp,
-                                )
-                            )
-                            LazyRow(
-                                contentPadding = PaddingValues(horizontal = 8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(state.cast.size) { index ->
-                                    ActorCard(actor = state.cast[index])
-                                }
-                            }
+                            CastSection(cast = state.cast)
                         }
                     }
                 }
@@ -135,6 +98,76 @@ private fun DetailScreen(
         }
     }
 }
+
+@Composable
+fun EpisodeSection(episode: Episode?) {
+    EpisodeCard(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        episode = episode,
+        orientation = EpisodeCardOrientation.VERTICAL,
+        includeShowDetails = false,
+    )
+
+}
+
+@Composable
+fun ShowSection(show: Show) {
+    Text(
+        text = "Show",
+        style = TextStyle(
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        ),
+        modifier = Modifier
+            .padding(
+                start = 8.dp,
+                end = 8.dp,
+                top = 8.dp,
+            )
+            .testTag("episodeShowHeader")
+    )
+    ShowCard(
+        show = show,
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .testTag("episodeShowContent")
+    )
+}
+
+@Composable
+fun CastSection(
+    cast: List<Actor>
+) {
+    Text(
+        text = "Cast",
+        style = TextStyle(
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        ),
+        modifier = Modifier
+            .padding(
+                start = 8.dp,
+                end = 8.dp,
+                top = 8.dp,
+            )
+            .testTag("episodeCastHeader")
+    )
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.testTag("episodeCastContent")
+    ) {
+        items(cast.size) { index ->
+            ActorCard(
+                actor = cast[index],
+                modifier = Modifier.testTag("episodeCastItem")
+            )
+        }
+    }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

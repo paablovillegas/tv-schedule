@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pablo.tvschedule.data.Result
 import com.pablo.tvschedule.domain.use_case.ScheduleUseCase
+import com.pablo.tvschedule.presentation.core.formatDate
+import com.pablo.tvschedule.presentation.core.fromHour
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -27,13 +29,15 @@ class HomeViewModel @Inject constructor(
 
     private fun getSchedule() {
         viewModelScope.launch {
-            getScheduleUseCase("US", state.formatDate()).also { result ->
+            getScheduleUseCase("US", state.date.formatDate()).also { result ->
                 when (result) {
                     is Result.Success -> {
                         state = state.copy(
                             isLoading = false,
-                            schedule = result.data ?: emptyList(),
-                            secondSchedule = result.data?.groupBy { it.airTime } ?: mapOf()
+                            schedule = result.data ?: mapOf(),
+                            filteredSchedule = result.data ?: mapOf(),
+                            startHour = 0,
+                            endHour = 2359
                         )
                     }
 
@@ -46,12 +50,20 @@ class HomeViewModel @Inject constructor(
                     is Result.Error -> {
                         state = state.copy(
                             isLoading = false,
-                            schedule = emptyList()
+                            schedule = mapOf()
                         )
                     }
                 }
             }
         }
+    }
+
+    private fun filterSchedule() {
+        state = state.copy(
+            filteredSchedule = state.schedule
+                .filterNot { it.key.fromHour() < state.startHour }
+                .filterNot { it.key.fromHour() > state.endHour }
+        )
     }
 
     fun showDatePicker() {
@@ -64,6 +76,28 @@ class HomeViewModel @Inject constructor(
         state = state.copy(
             showDatePickerDialog = false
         )
+    }
+
+    fun showTimePicker() {
+        state = state.copy(
+            showTimePickerDialog = true
+        )
+    }
+
+    fun hideTimePicker() {
+        state = state.copy(
+            showTimePickerDialog = false
+        )
+    }
+
+    fun setStartHour(hour: String) {
+        state = state.copy(startHour = hour.fromHour())
+        filterSchedule()
+    }
+
+    fun setEndHour(hour: String) {
+        state = state.copy(endHour = hour.fromHour())
+        filterSchedule()
     }
 
     fun setDate(dateInMillis: Long) {
