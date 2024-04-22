@@ -37,8 +37,10 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
-jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup"}
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+test-compose-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+test-compose-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

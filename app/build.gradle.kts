@@ -74,4 +74,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.jsoup)
+
+    androidTestImplementation(libs.test.compose.junit)
+    debugImplementation(libs.test.compose.manifest)
 }

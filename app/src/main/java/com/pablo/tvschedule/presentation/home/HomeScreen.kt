@@ -74,6 +74,7 @@ fun HomeScreen(
         } else {
             Box(
                 modifier = Modifier.padding(paddingValues)
+                    .testTag("homeContent")
             ) {
                 HomeContent(
                     state = state,
@@ -90,7 +91,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeContent(
+private fun HomeContent(
     modifier: Modifier = Modifier,
     state: HomeState,
     homeInteraction: (HomeInteraction) -> Unit = { }
@@ -113,7 +114,7 @@ fun HomeContent(
 }
 
 @Composable
-fun HourSelector(
+private fun HourSelector(
     modifier: Modifier = Modifier,
     state: HomeState,
     homeInteraction: (HomeInteraction) -> Unit
@@ -146,7 +147,7 @@ fun HourSelector(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ScheduleList(
+private fun ScheduleList(
     modifier: Modifier = Modifier,
     state: HomeState,
     homeInteraction: (HomeInteraction) -> Unit
@@ -166,7 +167,7 @@ fun ScheduleList(
                         .padding(4.dp)
                 ) {
                     Text(
-                        text = time,
+                        text = time.toHour(),
                         style = TextStyle(
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
@@ -212,14 +213,6 @@ private fun getHomeInteraction(
 
         is HomeInteraction.HideDatePicker -> {
             viewModel.hideDatePicker()
-        }
-
-        is HomeInteraction.ShowTimePicker -> {
-            viewModel.showTimePicker()
-        }
-
-        is HomeInteraction.HideTimePicker -> {
-            viewModel.hideTimePicker()
         }
 
         is HomeInteraction.ChangeScheduleDate -> {

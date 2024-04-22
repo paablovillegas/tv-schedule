@@ -2,6 +2,15 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="DetailScreenTest">
+        <State />
+      </entry>
+      <entry key="EpisodeCardTest">
+        <State />
+      </entry>
+      <entry key="HomeScreenTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -17,6 +26,9 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-04-20T00:02:42.864780500Z" />
         </State>
+      </entry>
+      <entry key="testLoadingContent()">
+        <State />
       </entry>
     </value>
   </component>

@@ -54,7 +54,7 @@ fun DetailScreen(
 }
 
 @Composable
-private fun DetailScreen(
+fun DetailScreen(
     state: DetailState,
     navigateBack: () -> Unit = { }
 ) {
@@ -72,27 +72,37 @@ private fun DetailScreen(
                 modifier = Modifier.padding(paddingValues = paddingValues)
             )
         } else {
-            Box(
+            DetailContent(
                 modifier = Modifier.padding(paddingValues)
-            ) {
-                LazyColumn(
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                ) {
-                    item {
-                        EpisodeSection(episode = state.episode)
-                    }
+                    .testTag("detailContent"),
+                state = state
+            )
+        }
+    }
+}
 
-                    state.episode?.show?.let { show ->
-                        item {
-                            ShowSection(show)
-                        }
-                    }
+@Composable
+private fun DetailContent(
+    modifier: Modifier = Modifier,
+    state: DetailState,
+) {
+    Box(modifier = modifier) {
+        LazyColumn(
+            contentPadding = PaddingValues(vertical = 8.dp),
+        ) {
+            item {
+                EpisodeSection(episode = state.episode)
+            }
 
-                    if (state.cast.isNotEmpty()) {
-                        item {
-                            CastSection(cast = state.cast)
-                        }
-                    }
+            state.episode?.show?.let { show ->
+                item {
+                    ShowSection(show)
+                }
+            }
+
+            if (state.cast.isNotEmpty()) {
+                item {
+                    CastSection(cast = state.cast)
                 }
             }
         }
@@ -100,9 +110,10 @@ private fun DetailScreen(
 }
 
 @Composable
-fun EpisodeSection(episode: Episode?) {
+private fun EpisodeSection(episode: Episode?) {
     EpisodeCard(
-        modifier = Modifier.padding(horizontal = 8.dp),
+        modifier = Modifier.padding(horizontal = 8.dp)
+            .testTag("episodeEpisodeContent"),
         episode = episode,
         orientation = EpisodeCardOrientation.VERTICAL,
         includeShowDetails = false,
@@ -111,7 +122,7 @@ fun EpisodeSection(episode: Episode?) {
 }
 
 @Composable
-fun ShowSection(show: Show) {
+private fun ShowSection(show: Show) {
     Text(
         text = "Show",
         style = TextStyle(
@@ -136,7 +147,7 @@ fun ShowSection(show: Show) {
 }
 
 @Composable
-fun CastSection(
+private fun CastSection(
     cast: List<Actor>
 ) {
     Text(
@@ -171,7 +182,7 @@ fun CastSection(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailTopBar(
+private fun DetailTopBar(
     title: String,
     navigateBack: () -> Unit
 ) {

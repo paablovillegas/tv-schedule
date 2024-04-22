@@ -61,8 +61,8 @@ class HomeViewModel @Inject constructor(
     private fun filterSchedule() {
         state = state.copy(
             filteredSchedule = state.schedule
-                .filterNot { it.key.fromHour() < state.startHour }
-                .filterNot { it.key.fromHour() > state.endHour }
+                .filterNot { it.key < state.startHour }
+                .filterNot { it.key > state.endHour }
         )
     }
 
@@ -75,18 +75,6 @@ class HomeViewModel @Inject constructor(
     fun hideDatePicker() {
         state = state.copy(
             showDatePickerDialog = false
-        )
-    }
-
-    fun showTimePicker() {
-        state = state.copy(
-            showTimePickerDialog = true
-        )
-    }
-
-    fun hideTimePicker() {
-        state = state.copy(
-            showTimePickerDialog = false
         )
     }
 

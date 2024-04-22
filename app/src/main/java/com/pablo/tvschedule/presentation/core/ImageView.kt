@@ -22,6 +22,7 @@ fun ImagePainter(
             .size(Size.ORIGINAL)
             .build(),
         placeholder = painterResource(id = R.drawable.ic_launcher_background),
+        error = painterResource(id = R.drawable.ic_launcher_background),
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
         modifier = modifier,

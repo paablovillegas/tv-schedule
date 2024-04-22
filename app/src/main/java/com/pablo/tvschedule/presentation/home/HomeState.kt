@@ -6,10 +6,9 @@ import java.time.LocalDate
 data class HomeState(
     val isLoading: Boolean = true,
     val showDatePickerDialog: Boolean = false,
-    val showTimePickerDialog: Boolean = true,
     val date: LocalDate = LocalDate.now(),
     val startHour: Int = 0,
     val endHour: Int = 2359,
-    val schedule: Map<String, List<Episode>> = mapOf(),
-    val filteredSchedule: Map<String, List<Episode>> = mapOf()
+    val schedule: Map<Int, List<Episode>> = mapOf(),
+    val filteredSchedule: Map<Int, List<Episode>> = mapOf()
 )

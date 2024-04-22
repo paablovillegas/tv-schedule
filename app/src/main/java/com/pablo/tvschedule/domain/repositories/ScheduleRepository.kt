@@ -4,5 +4,5 @@ import com.pablo.tvschedule.data.Result
 import com.pablo.tvschedule.domain.model.Episode
 
 interface ScheduleRepository {
-    suspend fun getSchedule(country: String, date: String): Result<Map<String, List<Episode>>>
+    suspend fun getSchedule(country: String, date: String): Result<Map<Int, List<Episode>>>
 }

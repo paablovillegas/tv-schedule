@@ -27,7 +27,7 @@ class DetailViewModel @Inject constructor(
         getEpisode()
     }
 
-    private fun getEpisode() {
+    fun getEpisode() {
         savedStateHandle.get<Int>("id")?.let { episodeId ->
             viewModelScope.launch {
                 episodeUseCase(id = episodeId).also { result ->

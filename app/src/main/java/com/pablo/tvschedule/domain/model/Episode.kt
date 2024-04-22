@@ -18,7 +18,7 @@ fun getEpisode(
     hasRating: Boolean = true,
     hasImage: Boolean = true,
     hasSummary: Boolean = true,
-    showDetails: Show = getShow()
+    showDetails: Show? = getShow()
 ) = Episode(
     id = 1,
     name = "The Change Constant",

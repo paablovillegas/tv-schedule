@@ -18,31 +18,32 @@ object RemoteModule {
 
     @Provides
     @Singleton
-    fun provideScheduleApi(): ScheduleApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ScheduleApi::class.java)
+    fun provideRetrofit(): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideScheduleApi(
+        retrofit: Retrofit
+    ): ScheduleApi {
+        return retrofit.create(ScheduleApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideEpisodeApi(): EpisodeApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(EpisodeApi::class.java)
+    fun provideEpisodeApi(
+        retrofit: Retrofit
+    ): EpisodeApi {
+        return retrofit.create(EpisodeApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideCastApi(): CastApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(CastApi::class.java)
+    fun provideCastApi(
+        retrofit: Retrofit
+    ): CastApi {
+        return retrofit.create(CastApi::class.java)
     }
 }
