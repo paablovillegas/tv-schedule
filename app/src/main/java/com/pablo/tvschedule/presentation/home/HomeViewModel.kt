@@ -32,7 +32,8 @@ class HomeViewModel @Inject constructor(
                     is Result.Success -> {
                         state = state.copy(
                             isLoading = false,
-                            schedule = result.data ?: emptyList()
+                            schedule = result.data ?: emptyList(),
+                            secondSchedule = result.data?.groupBy { it.airTime } ?: mapOf()
                         )
                     }
 
@@ -67,7 +68,7 @@ class HomeViewModel @Inject constructor(
 
     fun setDate(dateInMillis: Long) {
         val date = Instant.ofEpochMilli(dateInMillis)
-            .atZone(ZoneId.systemDefault())
+            .atZone(ZoneId.of("ECT"))
             .toLocalDate()
         state = state.copy(
             isLoading = true,

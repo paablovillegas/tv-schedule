@@ -1,11 +1,11 @@
-package com.pablo.tvschedule.presentation.common
+package com.pablo.tvschedule.presentation.core
 
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import coil.compose.rememberAsyncImagePainter
+import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.pablo.tvschedule.R
@@ -16,17 +16,14 @@ fun ImagePainter(
     contentDescription: String?,
     image: String?
 ) {
-    val painter = rememberAsyncImagePainter(
+    AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(image ?: R.drawable.ic_launcher_background)
+            .data(image)
             .size(Size.ORIGINAL)
-            .build()
-    )
-
-    Image(
-        painter = painter,
+            .build(),
+        placeholder = painterResource(id = R.drawable.ic_launcher_background),
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
-        modifier = modifier
+        modifier = modifier,
     )
 }

@@ -14,7 +14,12 @@ data class Episode(
     val show: Show?,
 )
 
-fun getEpisode() = Episode(
+fun getEpisode(
+    hasRating: Boolean = true,
+    hasImage: Boolean = true,
+    hasSummary: Boolean = true,
+    showDetails: Show = getShow()
+) = Episode(
     id = 1,
     name = "The Change Constant",
     season = 12,
@@ -22,8 +27,8 @@ fun getEpisode() = Episode(
     airDate = "2019-05-16",
     airTime = "20:00",
     runtime = 30,
-    rating = 7.6,
-    image = "https://static.tvmaze.com/uploads/images/medium_landscape/197/493238.jpg",
-    summary = "\u003Cp\u003ESheldon and Amy await big news.\u003C/p\u003E",
-    show = getShow()
+    rating = if (hasRating) 7.6 else null,
+    image = if (hasImage) "https://static.tvmaze.com/uploads/images/medium_landscape/197/493238.jpg" else null,
+    summary = if (hasSummary) "Sheldon and Amy await big news." else null,
+    show = showDetails
 )

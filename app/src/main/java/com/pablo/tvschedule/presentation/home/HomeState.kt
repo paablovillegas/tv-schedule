@@ -7,7 +7,8 @@ data class HomeState(
     val isLoading: Boolean = true,
     val schedule: List<Episode> = emptyList(),
     val showDatePickerDialog: Boolean = false,
-    val date: LocalDate = LocalDate.now()
+    val date: LocalDate = LocalDate.now(),
+    val secondSchedule: Map<String, List<Episode>> = mapOf()
 ) {
     fun formatDate(): String {
         return buildString {

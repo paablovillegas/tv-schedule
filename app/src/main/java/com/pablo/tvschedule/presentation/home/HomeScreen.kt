@@ -1,66 +1,43 @@
 package com.pablo.tvschedule.presentation.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pablo.tvschedule.domain.model.Episode
-import com.pablo.tvschedule.domain.model.getEpisode
-import com.pablo.tvschedule.presentation.common.LoadingContent
-import com.pablo.tvschedule.presentation.home.components.EpisodeItem
-import java.time.LocalDate
-import java.time.ZoneOffset
+import com.pablo.tvschedule.presentation.core.EpisodeCard
+import com.pablo.tvschedule.presentation.core.LoadingContent
+import com.pablo.tvschedule.presentation.home.components.CustomDatePickerDialog
+import com.pablo.tvschedule.presentation.home.components.HomeTopBar
+import com.pablo.tvschedule.presentation.home.provider.HomeStatePreviewParameterProvider
 
 @Composable
 fun HomeScreen(
     onEpisodeClick: (Int) -> Unit = { },
-    onSearchClick: () -> Unit = { },
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
-    val homeInteraction: (HomeInteraction) -> Unit = { interaction ->
-        when (interaction) {
-            is HomeInteraction.EpisodeClick -> {
-                onEpisodeClick(interaction.id)
-            }
-
-            is HomeInteraction.ShowDatePicker -> {
-                viewModel.showDatePicker()
-            }
-
-            is HomeInteraction.HideDatePicker -> {
-                viewModel.hideDatePicker()
-            }
-
-            is HomeInteraction.ChangeScheduleDate -> {
-                viewModel.setDate(interaction.dateInMillis)
-            }
-
-            is HomeInteraction.SearchClick -> {
-                onSearchClick()
-            }
-        }
-    }
+    val homeInteraction = getHomeInteraction(
+        onEpisodeClick = onEpisodeClick,
+        viewModel = viewModel
+    )
 
     HomeScreen(
         state = state,
@@ -70,7 +47,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeScreen(
+fun HomeScreen(
     state: HomeState,
     homeInteraction: (HomeInteraction) -> Unit = { },
 ) {
@@ -87,133 +64,104 @@ private fun HomeScreen(
                 modifier = Modifier.padding(paddingValues = paddingValues)
             )
         } else {
-            HomeContent(
-                modifier = Modifier.padding(paddingValues = paddingValues),
-                schedule = state.schedule,
-                homeInteraction = homeInteraction
-            )
-            CustomDatePicker(
-                showDatePickerDialog = state.showDatePickerDialog,
-                currentDate = state.date,
-                homeInteraction = homeInteraction
-            )
+            Box(
+                modifier = Modifier.padding(paddingValues)
+            ) {
+                HomeContent(
+                    schedule = state.secondSchedule,
+                    homeInteraction = homeInteraction
+                )
+                CustomDatePickerDialog(
+                    showDatePickerDialog = state.showDatePickerDialog,
+                    currentDate = state.date,
+                    homeInteraction = homeInteraction
+                )
+            }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    schedule: List<Episode>,
+    schedule: Map<String, List<Episode>>,
     homeInteraction: (HomeInteraction) -> Unit = { }
 ) {
-    Column(
-        modifier = modifier
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        LazyColumn {
-            items(schedule.size) { index ->
-                EpisodeItem(episode = schedule[index]) { id ->
-                    homeInteraction(HomeInteraction.EpisodeClick(id))
+
+        for ((time, episodes) in schedule) {
+            stickyHeader {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorScheme.background)
+                        .padding(4.dp)
+                ) {
+                    Text(
+                        text = time,
+                        style = TextStyle(
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                }
+            }
+            item {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+
+                    for (episode in episodes) {
+                        EpisodeCard(episode = episode) { id ->
+                            homeInteraction(HomeInteraction.EpisodeClick(id))
+                        }
+                    }
                 }
             }
         }
+
+        /*
+        items(schedule.size) { index ->
+            EpisodeCard(episode = schedule[index]) { id ->
+                homeInteraction(HomeInteraction.EpisodeClick(id))
+            }
+        } */
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeTopBar(
-    title: String,
-    homeInteraction: (HomeInteraction) -> Unit = { }
-) {
-    TopAppBar(
-        title = {
-            Text(text = title)
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        actions = {
-            IconButton(onClick = {
-                homeInteraction(HomeInteraction.ShowDatePicker())
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.DateRange,
-                    contentDescription = "Select date"
-                )
-            }
-            IconButton(onClick = {
-                homeInteraction(HomeInteraction.SearchClick())
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search Show"
-                )
-            }
+private fun getHomeInteraction(
+    onEpisodeClick: (Int) -> Unit,
+    viewModel: HomeViewModel
+): (HomeInteraction) -> Unit = { interaction ->
+    when (interaction) {
+        is HomeInteraction.EpisodeClick -> {
+            onEpisodeClick(interaction.id)
         }
-    )
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomDatePicker(
-    showDatePickerDialog: Boolean,
-    currentDate: LocalDate,
-    homeInteraction: (HomeInteraction) -> Unit
-) {
-    if (!showDatePickerDialog) return
-
-    val state = rememberDatePickerState(
-        initialSelectedDateMillis = currentDate
-            .atStartOfDay()
-            .toInstant(ZoneOffset.MIN)
-            .toEpochMilli()
-    )
-    DatePickerDialog(
-        onDismissRequest = {
-            homeInteraction(HomeInteraction.HideDatePicker())
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                state.selectedDateMillis?.let { millis ->
-                    homeInteraction(HomeInteraction.ChangeScheduleDate(millis))
-                }
-                homeInteraction(HomeInteraction.HideDatePicker())
-            }) {
-                Text(text = "Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = {
-                homeInteraction(HomeInteraction.HideDatePicker())
-            }) {
-                Text(text = "Cancel")
-            }
+        is HomeInteraction.ShowDatePicker -> {
+            viewModel.showDatePicker()
         }
-    ) {
-        DatePicker(state = state)
+
+        is HomeInteraction.HideDatePicker -> {
+            viewModel.hideDatePicker()
+        }
+
+        is HomeInteraction.ChangeScheduleDate -> {
+            viewModel.setDate(interaction.dateInMillis)
+        }
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview(
-    @PreviewParameter(HomeScreenParameterProvider::class) state: HomeState
+    @PreviewParameter(HomeStatePreviewParameterProvider::class) state: HomeState
 ) {
     HomeScreen(state = state)
-}
-
-class HomeScreenParameterProvider : PreviewParameterProvider<HomeState> {
-    override val values = sequenceOf(
-        HomeState(
-            isLoading = true,
-            date = LocalDate.now()
-        ),
-        HomeState(
-            isLoading = false,
-            schedule = listOf(getEpisode(), getEpisode(), getEpisode()),
-            date = LocalDate.now()
-        )
-    )
 }

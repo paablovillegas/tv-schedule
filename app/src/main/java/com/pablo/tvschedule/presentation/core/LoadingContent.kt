@@ -1,4 +1,4 @@
-package com.pablo.tvschedule.presentation.common
+package com.pablo.tvschedule.presentation.core
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight

@@ -11,6 +11,7 @@ data class ShowDto(
     val genres: List<String>,
     val premiered: String,
     val ended: String?,
+    val runtime: Int,
     val rating: Rating,
     val image: Image?,
     val summary: String?,
@@ -23,7 +24,8 @@ data class ShowDto(
         genres = genres.joinToString(separator = ", ") { it },
         premiered = premiered.split("-")[0],
         ended = ended?.split("-")?.get(0),
-        rating = rating.average,
+        runtime = runtime,
+        rating = if (rating.average > 0) rating.average else null,
         image = image?.medium,
         summary = parseSummary()
     )
